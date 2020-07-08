@@ -8,10 +8,10 @@ chrome.runtime.onMessage.addListener(
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify(request.userData),
-        }).then((response) => {
-            console.log('success');
-            sendResponse(response.json());
-        }).catch((error) => {
+        })
+        .then((response) => response.json())
+        .then((data) => sendResponse(data))
+        .catch((error) => {
             console.log(error);
         });
     } else if (request.contentScriptQuery ===  "getUserData") {
