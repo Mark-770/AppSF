@@ -1,11 +1,26 @@
+/**
+ * Функция добавления кнопки на страницу резюме
+ */
+const addSFButtonToPage = function() {
+    const buttonsGroup = document.querySelector('.bloko-button-group');
 
-window.onload = function (name, value) {
-    // alert('Страница загружена');
-    const script = document.createElement('script');
-    document.getElementsByTagName('head')[0].appendChild(script);
-    alert('script loaded');
+    if (!buttonsGroup) {
+        return;
+    }
 
+    const customButton = document.createElement('button');
+    customButton.setAttribute('type', 'button');
+    customButton.classList.add('bloko-button', 'bloko-button_icon-only');
+    customButton.innerHTML = '<span class="bloko-button__icon">SF</span>';
+    buttonsGroup.appendChild(customButton);
 
+    return customButton;
+};
+
+/**
+ * Функция извлечения данных со страницы
+ */
+const getCandidateInfoFromPage = function() {
     const fragment = document.createDocumentFragment();
     const fioContainer = document.querySelector('.resume-header-main');
     const spanInfo = Array.from(fioContainer.getElementsByTagName('span'));
@@ -18,7 +33,6 @@ window.onload = function (name, value) {
     const resumeBlockInnerText = Array.from(document.querySelectorAll('.resume-block'));
 
     // console.log(spanInfo);
-    console.log(resumeBlockInnerText);
     // console.log(resumeBlockExperienceAll[1].innerText);
 
     const fio = spanInfo[0].textContent;
@@ -36,7 +50,6 @@ window.onload = function (name, value) {
     // const skype = spanInfo[9].textContent;
 
     // Resume
-
     const position = resumeBlockInnerText[0].innerText;//позиция
     const experience = resumeBlockInnerText[1].innerText;//опыт
     const skills = resumeBlockInnerText[2].innerText;//навыки
@@ -46,46 +59,56 @@ window.onload = function (name, value) {
     const language = resumeBlockInnerText[6].innerText; // язык
     const citizenship = resumeBlockInnerText[7].innerText;// гражданство
 
-
-    console.log(position);
-    // console.log(fio, gender, age, dob, city, metro, phone, email, skype);
-    // console.log(firstName,secondName, phone, email);
-
-    const btn_candidate = document.querySelector('.bloko-button-group');
-    // console.log(btn_candidate);
-    const addButton = document.createElement('button');
-    const spanButton = document.createElement('span');
-    spanButton.textContent = 'SF';
-    addButton.appendChild(spanButton);
-    addButton.classList.add('bloko-button', 'bloko-button_icon-only');
-    btn_candidate.appendChild(addButton);
-
-
-
-    const userData = {
+    // Собираем в этом объекте данные резюме
+    return {
         firstName: 'Bolvan',
         lastName: 'Flintstone',
         primaryEmail: "bolvan@apple.ru",
         cellPhone: '+12399',
+        // position,
+        // fio, 
+        // gender, 
+        // age, 
+        // dob, 
+        // city, 
+        // metro, 
+        // phone, 
+        // email, 
+        // skype, 
+        // firstName,
+        // secondName,
+        // phone,
+        // email,
+    }
+};
+
+const app = function (name, value) {
+    const customButton = addSFButtonToPage();
+    const candidate = getCandidateInfoFromPage();
+
+    const newCandidate =  {
+        "firstName": "Fred",
+        "lastName": "Flintstone",
+        "primaryEmail": "a12_email@email.ru",
+        "cellPhone": "+789699",
     };
 
-    addButton.addEventListener('click', (event) => {
+    customButton.addEventListener('click', (event) => {
         // POST запрос
         chrome.runtime.sendMessage(
-            { contentScriptQuery: "sendData", userData },
+            { contentScriptQuery: "sendData", userData: newCandidate },
             (data) => { 
                 console.log(data);
             }
         );
-
+        
         // GET запрос
-        chrome.runtime.sendMessage({ contentScriptQuery: "getUserData", userId: 8842 },
-            (data) => {
-                console.log(data);
-            }
-        );
+        // chrome.runtime.sendMessage({ contentScriptQuery: "getUserData", userId: 8842 },
+        //     (data) => {
+        //         console.log(data);
+        //     }
+        // );
     });
-
 };
 
-
+window.onload = app;
