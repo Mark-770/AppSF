@@ -1,0 +1,28 @@
+{
+  "name": "Расширение SF",
+  "version": "1.0",
+  "description": "Данные кандидата",
+  "permissions": [
+    "storage",
+    "http://*/*",
+    "https://*/*",
+    "http://*/"
+  ],
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": [
+        "https://hh.ru/resume/*"
+      ],
+      "js": [
+
+        "index.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "img/logo.png"
+  }
+}
