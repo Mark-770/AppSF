@@ -17,6 +17,46 @@ const addSFButtonToPage = function() {
     return customButton;
 };
 
+const getResumeFile = () => {
+    // GET запрос
+    chrome.runtime.sendMessage(
+        { contentScriptQuery: "getResumeFile", userId: 8842 },
+        (data) => {console.log(data);}
+    );
+};
+
+const getResumeFilesLinks = function() {
+    const downloadButton = document.querySelector('.bloko-button-group .bloko-button:first-child');
+
+    const mouseEvent = new MouseEvent('click', {
+        'view': window,
+        'bubbles': true,
+        'cancelable': true
+    });
+
+    downloadButton.dispatchEvent(mouseEvent);
+
+    setTimeout(() => {
+        const resumeNodes = document.querySelectorAll('.bloko-drop-menu-item');
+        const resumeLinks = [...resumeNodes].map((node) => node.getAttribute('href'));
+        
+        // GET запрос
+        chrome.runtime.sendMessage(
+            { contentScriptQuery: "getResumeFile", resumeLink: resumeLinks[0] },
+            sendResumeFile
+        );
+        
+        window.dispatchEvent(mouseEvent);
+    }, 1500);
+};
+
+const sendResumeFile = (base64) => {
+    chrome.runtime.sendMessage(
+        { contentScriptQuery: "sendResumeFile", file: base64},
+        (data) => {}
+    );
+};
+
 /**
  * Функция извлечения данных со страницы
  */
@@ -93,6 +133,8 @@ const app = function (name, value) {
         "cellPhone": "+789699",
     };
 
+    getResumeFilesLinks();
+
     customButton.addEventListener('click', (event) => {
         // POST запрос
         chrome.runtime.sendMessage(
@@ -110,5 +152,6 @@ const app = function (name, value) {
         // );
     });
 };
+
 
 window.onload = app;
