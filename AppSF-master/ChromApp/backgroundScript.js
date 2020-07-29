@@ -49,22 +49,25 @@ const dispatch = {
     sendResumeFile: (request, sender, sendResponse) => {
         // вот тут нужно создать POST запрос для сохранения файла
         // в request.file уже лежит base64 строка
-            fetch('https://api18preview.sapsf.com/odata/v2/Candidate(8856L)?$format=json', {
+            fetch('https://api18preview.sapsf.com/odata/v2/Candidate(8863L)?$format=json', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Basic aWR1ZG5pa0BNb2xnYXRlc3Q6ODg4OA==',
-                    'Content-Type': 'application/json;charset=utf-8'
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Access-Control-Allow-Origin':'*',
+                    'Access-Control-Allow-Methods': 'POST'
                 },
-                body: JSON.stringify(request.userData),
+                body: JSON.stringify(request.userResume),
             })
                 .then((response) => response.json())
                 .then((data) => sendResponse(data))
                 .catch((error) => {
                     console.log(error);
                 });
+        // sendResponse();
         },
 
-        // sendResponse();
+        //
     // },
 };
 

@@ -129,15 +129,15 @@ const app = function (name, value) {
     const newCandidate = {
         "firstName": "Mark",
         "lastName": "Benedis",
-        "primaryEmail": "123mark@gmail.com",
+        "primaryEmail": "1234567mark@gmail.com",
         "cellPhone": candidate.cellPhone,
         // "firstName": candidate.firstName,
         // "lastName": candidate.lastName,
         // "primaryEmail": candidate.primaryEmail,
         // "cellPhone": candidate.cellPhone,
     };
-    const newReuseme = {
-        "uri" : "https://api18preview.sapsf.com/odata/v2/Candidate(8860L)?$format=json",
+    const newResume = {
+        "uri" : "https://api18preview.sapsf.com/odata/v2/Candidate(8863L)?$format=json",
         "type" : "SFOData.Candidate",
         "module":"RECRUITING",
         "fileName":"resume.docx",
@@ -151,11 +151,18 @@ const app = function (name, value) {
     customButton.addEventListener('click', (event) => {
         // POST запрос
         chrome.runtime.sendMessage(
-            {contentScriptQuery: "sendData", userData: newCandidate , newReuseme },
+            {contentScriptQuery: "sendData", userData: newCandidate  },
             (data) => {
                 console.log(data);
             }
         );
+            // POST запрос
+            chrome.runtime.sendMessage(
+                {contentScriptQuery: "sendResumeFile", userResume: newResume},
+                (data) => {
+                    console.log(data);
+                }
+            );
 
         // GET запрос
     //     chrome.runtime.sendMessage({ contentScriptQuery: "getUserData", userId: 8856 },
